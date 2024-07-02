@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 
@@ -7,41 +6,57 @@ using UnityEngine;
 [CustomEditor(typeof(Maze))]
 public class MazeEditor : Editor {
 
-    private const string MazeSizeKey = "maze-size";
-    private const string SeedKey = "seed";
+    private SerializedProperty m_sizeProperty;
+    private SerializedProperty m_seedProperty;
+    private SerializedProperty m_isOptimizedProperty;
 
     private Maze m_maze;
+    private MeshFilter m_meshFilter;
     private Map m_map;
-    private Vector2Int m_mazeSize;
-    private int m_seed;
 
 
     private void OnEnable () {
         m_maze = (Maze)target;
-        m_mazeSize = ExtendedEditorPrefs.GetVector2Int(MazeSizeKey, new Vector2Int(10, 10));
-        m_map = new Map(m_mazeSize);
-        m_seed = EditorPrefs.GetInt(SeedKey);
+        m_meshFilter = m_maze.GetComponent<MeshFilter>();
+        m_map = new Map(m_maze.Size);
+
+        m_sizeProperty = serializedObject.FindProperty("size");
+        m_seedProperty = serializedObject.FindProperty("seed");
+        m_isOptimizedProperty = serializedObject.FindProperty("isOptimized");
     }
 
 
     public override void OnInspectorGUI () {
         base.OnInspectorGUI();
+        serializedObject.Update();
+
         EditorGUI.BeginChangeCheck();
-        m_seed = EditorGUILayout.IntField("Seed", m_seed);
-        m_mazeSize = EditorGUILayout.Vector2IntField("Maze Size", m_mazeSize);
-        m_mazeSize.x = Math.Max(m_mazeSize.x, 4);
-        m_mazeSize.y = Math.Max(m_mazeSize.y, 4);
+
+        EditorGUILayout.PropertyField(m_sizeProperty);
+        Vector2Int size = m_sizeProperty.vector2IntValue;
+        size.x = Mathf.Max(size.x, 4);
+        size.y = Mathf.Max(size.y, 4);
+        m_sizeProperty.vector2IntValue = size;
+
+        EditorGUILayout.PropertyField(m_seedProperty);
+        EditorGUILayout.PropertyField(m_isOptimizedProperty);
 
         if (EditorGUI.EndChangeCheck()) {
-            EditorPrefs.SetInt(SeedKey, m_seed);
-            ExtendedEditorPrefs.SetVector2Int(MazeSizeKey, m_mazeSize);
-            m_map = new Map(m_mazeSize);
+            m_map = new Map(size);
             SceneView.RepaintAll();
+            serializedObject.ApplyModifiedProperties();
         }
 
         EditorGUILayout.Space(15);
         if (GUILayout.Button("Create New Maze"))
-            m_maze.CreateNewMaze(m_mazeSize, m_seed);
+            m_maze.CreateNewMaze();
+        if (m_meshFilter.sharedMesh != null && GUILayout.Button("Export Mesh"))
+            ExportMesh(m_meshFilter.sharedMesh);
+    }
+
+
+    private void ExportMesh (Mesh mesh) {
+        AssetDatabase.CreateAsset(mesh, $"Assets/Meshes/{mesh.name}.mesh");
     }
 
 

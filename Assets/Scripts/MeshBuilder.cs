@@ -19,7 +19,7 @@ public class MeshBuilder {
 
 
     public MeshBuilder (int cubes, int planes, int vertices = 0, int indexes = 0) {
-        const int cubeSides = 6;
+        const int cubeSides = 5; // do not add a bottom plane
         const int planeVertices = 4;
         const int planeIndexes = 6;
         const int cubeVertices = cubeSides * planeVertices;
@@ -86,7 +86,7 @@ public class MeshBuilder {
         var mesh = new Mesh {
             name = name,
             vertices = m_vertices,
-            triangles = m_indexes,
+            triangles = m_indexes
         };
 
         if (m_descriptors.Count > 0)

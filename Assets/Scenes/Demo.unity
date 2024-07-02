@@ -169,6 +169,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshFilter: {fileID: 165814701}
+  size: {x: 10, y: 10}
+  seed: 0
+  isOptimized: 0
 --- !u!23 &165814700
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -219,7 +222,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 165814697}
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300000, guid: 1dd63561a067361419514aac25134de3, type: 2}
 --- !u!1 &672109796
 GameObject:
   m_ObjectHideFlags: 0
