@@ -40,6 +40,16 @@ public class Cell {
     }
 
 
+    public bool IsConnectWithLowerCell () {
+        return LowerCell != null;
+    }
+
+
+    public bool IsConnectWithRightCell () {
+        return RightCell != null;
+    }
+
+
 
     public enum Side {
 

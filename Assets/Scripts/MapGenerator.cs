@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Random = System.Random;
 
 
 
-public class RecursiveBacktrackerAlgorithm {
+public class MapGenerator {
 
-    public Map GenerateMap (Vector2Int size) {
+    public Map GenerateMap (Vector2Int size, int seed) {
         var map = new Map(size);
-        Cell cell = map.GetRandomCell();
+        var random = new Random(seed);
+        Cell cell = map.GetRandomCell(random);
         cell.inMaze = true;
-        MoveNext(cell, map);
+        MoveNext(cell, map, random);
         return map;
     }
 
 
-    private void MoveNext (Cell cell, Map map) {
+    private void MoveNext (Cell cell, Map map, Random random) {
         int x = cell.Position.x;
         int y = cell.Position.y;
 
@@ -40,28 +41,28 @@ public class RecursiveBacktrackerAlgorithm {
             if (sides.Count == 0)
                 return;
 
-            Cell.Side side = sides[Random.Range(0, sides.Count)];
+            Cell.Side side = sides[random.Next(0, sides.Count)];
 
             switch (side) {
                 case Cell.Side.Top:
                     Cell upperCell = map[upperPosition];
                     cell.ConnectUpperCell(upperCell);
-                    MoveNext(upperCell, map);
+                    MoveNext(upperCell, map, random);
                     break;
                 case Cell.Side.Bottom:
                     Cell lowerCell = map[lowerPosition];
                     cell.ConnectLowerCell(lowerCell);
-                    MoveNext(lowerCell, map);
+                    MoveNext(lowerCell, map, random);
                     break;
                 case Cell.Side.Left:
                     Cell leftCell = map[leftPosition];
                     cell.ConnectLeftCell(leftCell);
-                    MoveNext(leftCell, map);
+                    MoveNext(leftCell, map, random);
                     break;
                 case Cell.Side.Right:
                     Cell rightCell = map[rightPosition];
                     cell.ConnectRightCell(rightCell);
-                    MoveNext(rightCell, map);
+                    MoveNext(rightCell, map, random);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
