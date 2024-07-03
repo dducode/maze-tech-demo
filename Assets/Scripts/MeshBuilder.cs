@@ -87,7 +87,7 @@ public class MeshBuilder {
 
     public Mesh BuildMesh (string name = null) {
         if (string.IsNullOrEmpty(name))
-            name = Guid.NewGuid().ToString();
+            name = $"mesh_{Guid.NewGuid()}";
 
         if (VerticesCount < m_vertices.Length) {
             m_vertices = m_vertices[..VerticesCount];
