@@ -35,7 +35,7 @@ public class MazeGenerator {
         for (var y = 0; y < map.Size.y - 1; y++) {
             for (var x = 0; x < map.Size.x; x++) {
                 if (!map[x, y].IsConnectWithLowerCell()) {
-                    while (x < map.Size.y && !map[x, y].IsConnectWithLowerCell())
+                    while (x < map.Size.x && !map[x, y].IsConnectWithLowerCell())
                         x++;
                     wallsCount++;
                 }

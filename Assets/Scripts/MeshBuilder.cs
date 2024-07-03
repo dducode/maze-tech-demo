@@ -10,8 +10,8 @@ public class MeshBuilder {
     public int VerticesCount { get; private set; }
     public int IndexesCount { get; private set; }
 
-    private readonly Vector3[] m_vertices;
-    private readonly int[] m_indexes;
+    private Vector3[] m_vertices;
+    private int[] m_indexes;
 
     private readonly List<SubMeshDescriptor> m_descriptors = new();
     private int m_indexStart;
@@ -34,6 +34,9 @@ public class MeshBuilder {
 
 
     public void AddVertices (Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4) {
+        if (m_vertices.Length < VerticesCount + 4)
+            ExpandVerticesArray();
+
         m_vertices[VerticesCount++] = v1;
         m_vertices[VerticesCount++] = v2;
         m_vertices[VerticesCount++] = v3;
@@ -42,6 +45,9 @@ public class MeshBuilder {
 
 
     public void AddIndexes (int t1, int t2, int t3, int t4, int t5, int t6) {
+        if (m_indexes.Length < IndexesCount + 6)
+            ExpandIndexesArray();
+
         m_indexes[IndexesCount++] = t1;
         m_indexes[IndexesCount++] = t2;
         m_indexes[IndexesCount++] = t3;
@@ -83,6 +89,16 @@ public class MeshBuilder {
         if (string.IsNullOrEmpty(name))
             name = Guid.NewGuid().ToString();
 
+        if (VerticesCount < m_vertices.Length) {
+            m_vertices = m_vertices[..VerticesCount];
+            Debug.LogWarning("Vertices array contains empty elements");
+        }
+
+        if (IndexesCount < m_indexes.Length) {
+            m_indexes = m_indexes[..IndexesCount];
+            Debug.LogWarning("Indexes array contains empty elements");
+        }
+
         var mesh = new Mesh {
             name = name,
             vertices = m_vertices,
@@ -94,6 +110,22 @@ public class MeshBuilder {
         mesh.RecalculateNormals();
 
         return mesh;
+    }
+
+
+    private void ExpandVerticesArray () {
+        var newArray = new Vector3[m_vertices.Length * 2];
+        Array.Copy(m_vertices, newArray, VerticesCount);
+        m_vertices = newArray;
+        Debug.LogWarning("Vertices array expanded");
+    }
+
+
+    private void ExpandIndexesArray () {
+        var newArray = new int[m_indexes.Length * 2];
+        Array.Copy(m_indexes, newArray, IndexesCount);
+        m_indexes = newArray;
+        Debug.LogWarning("Indexes array expanded");
     }
 
 }
