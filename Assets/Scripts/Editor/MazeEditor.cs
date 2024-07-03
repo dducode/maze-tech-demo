@@ -56,7 +56,10 @@ public class MazeEditor : Editor {
 
 
     private void ExportMesh (Mesh mesh) {
-        AssetDatabase.CreateAsset(mesh, $"Assets/Meshes/{mesh.name}.mesh");
+        AssetDatabase.CreateAsset(mesh, AssetDatabase.GenerateUniqueAssetPath($"Assets/Meshes/{mesh.name}.mesh"));
+        EditorUtility.FocusProjectWindow();
+        EditorGUIUtility.PingObject(mesh);
+        Selection.SetActiveObjectWithContext(mesh, mesh);
     }
 
 
@@ -78,18 +81,11 @@ public class MazeEditor : Editor {
 
 
     private void DrawCell (Vector3 center) {
-        Handles.DrawPolyLine(
-            MazeToWorldPosition(center + new Vector3(-0.5f, 0, 0.5f)),
-            MazeToWorldPosition(center + new Vector3(0.5f, 0, 0.5f)),
-            MazeToWorldPosition(center + new Vector3(0.5f, 0, -0.5f)),
-            MazeToWorldPosition(center + new Vector3(-0.5f, 0, -0.5f)),
-            MazeToWorldPosition(center + new Vector3(-0.5f, 0, 0.5f))
-        );
-    }
-
-
-    private Vector3 MazeToWorldPosition (Vector3 position) {
-        return m_maze.transform.localToWorldMatrix * new Vector4(position.x, position.y, position.z, 1);
+        Vector3 topLeft = m_maze.transform.TransformPoint(center + new Vector3(-0.5f, 0, 0.5f));
+        Vector3 topRight = m_maze.transform.TransformPoint(center + new Vector3(0.5f, 0, 0.5f));
+        Vector3 bottomRight = m_maze.transform.TransformPoint(center + new Vector3(0.5f, 0, -0.5f));
+        Vector3 bottomLeft = m_maze.transform.TransformPoint(center + new Vector3(-0.5f, 0, -0.5f));
+        Handles.DrawPolyLine(topLeft, topRight, bottomRight, bottomLeft, topLeft);
     }
 
 }
