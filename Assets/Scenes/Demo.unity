@@ -171,7 +171,7 @@ MonoBehaviour:
   meshFilter: {fileID: 165814701}
   size: {x: 10, y: 10}
   seed: 0
-  isOptimized: 0
+  isOptimized: 1
 --- !u!23 &165814700
 MeshRenderer:
   m_ObjectHideFlags: 0

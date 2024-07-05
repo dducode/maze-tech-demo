@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEditor.Formats.Fbx.Exporter;
 using UnityEngine;
 
 
@@ -50,16 +51,54 @@ public class MazeEditor : Editor {
         EditorGUILayout.Space(15);
         if (GUILayout.Button("Create New Maze"))
             m_maze.CreateNewMaze();
-        if (m_meshFilter.sharedMesh != null && GUILayout.Button("Export Mesh"))
-            ExportMesh(m_meshFilter.sharedMesh);
+
+        using (new EditorGUILayout.HorizontalScope()) {
+            if (m_meshFilter.sharedMesh != null) {
+                if (GUILayout.Button("Export Mesh"))
+                    ExportMesh(m_meshFilter.sharedMesh);
+                if (GUILayout.Button("Export FBX"))
+                    ExportFBX(m_meshFilter.sharedMesh);
+            }
+        }
     }
 
 
     private void ExportMesh (Mesh mesh) {
-        AssetDatabase.CreateAsset(mesh, AssetDatabase.GenerateUniqueAssetPath($"Assets/Meshes/{mesh.name}.mesh"));
+        if (!AssetDatabase.IsValidFolder("Assets/GeneratedAssets"))
+            AssetDatabase.CreateFolder("Assets", "GeneratedAssets");
+
+        AssetDatabase.CreateAsset(
+            mesh, AssetDatabase.GenerateUniqueAssetPath($"Assets/GeneratedAssets/{mesh.name}.mesh")
+        );
         EditorUtility.FocusProjectWindow();
         EditorGUIUtility.PingObject(mesh);
         Selection.SetActiveObjectWithContext(mesh, mesh);
+    }
+
+
+    private void ExportFBX (Mesh mesh) {
+        if (!AssetDatabase.IsValidFolder("Assets/GeneratedAssets"))
+            AssetDatabase.CreateFolder("Assets", "GeneratedAssets");
+
+        var fbx = new GameObject(mesh.name);
+        fbx.AddComponent<MeshFilter>().sharedMesh = mesh;
+        fbx.AddComponent<MeshRenderer>();
+        string assetPath = AssetDatabase.GenerateUniqueAssetPath($"Assets/GeneratedAssets/{mesh.name}.fbx");
+        string exportAssetPath = ModelExporter.ExportObject(
+            System.IO.Path.Combine(System.IO.Path.GetFullPath(assetPath)), fbx
+        );
+        AssetDatabase.Refresh();
+        DestroyImmediate(fbx);
+
+        if (!string.IsNullOrEmpty(exportAssetPath)) {
+            string relativePath = System.IO.Path.GetRelativePath(Application.dataPath, exportAssetPath);
+            var asset = AssetDatabase.LoadAssetAtPath<GameObject>(relativePath);
+            Selection.SetActiveObjectWithContext(asset, asset);
+            EditorUtility.FocusProjectWindow();
+        }
+        else {
+            Debug.LogError("Error while exporting FBX asset");
+        }
     }
 
 

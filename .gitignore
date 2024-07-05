@@ -62,3 +62,6 @@ crashlytics-build.properties
 
 /Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Roboto-Bold SDF.asset
 /Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset
+/[Aa]ssets/GeneratedAssets/
+/Assets/GeneratedAssets.meta
+/DemoAssembly.csproj.DotSettings
