@@ -20,28 +20,21 @@ public class CameraController : MonoBehaviour {
     }
 
 
-    public void TransformCamera () {
-        MoveCamera();
-        RotateCamera();
+    public void Zoom (float zoom) {
+        transform.position += transform.forward * zoom;
     }
 
 
-    public void Zoom () {
-        transform.position += transform.forward * Input.mouseScrollDelta.y;
+    public void MoveCamera (Vector3 v) {
+        v *= speed;
+        transform.position += transform.right * v.x + transform.up * v.y + transform.forward * v.z;
     }
 
 
-    private void MoveCamera () {
-        float x = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
-        float y = Input.GetAxis("Forward") * Time.deltaTime * speed;
-        float z = Input.GetAxis("Vertical") * Time.deltaTime * speed;
-        transform.position += transform.right * x + transform.up * y + transform.forward * z;
-    }
-
-
-    private void RotateCamera () {
-        m_xRotation -= Input.GetAxis("Mouse Y") * sensitive;
-        m_yRotation += Input.GetAxis("Mouse X") * sensitive;
+    public void RotateCamera (Vector2 rotation) {
+        rotation *= sensitive;
+        m_xRotation -= rotation.x;
+        m_yRotation += rotation.y;
         transform.rotation = Quaternion.Euler(m_xRotation, m_yRotation, 0);
     }
 

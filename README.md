@@ -8,6 +8,7 @@ You can clone the project and open it in Unity Editor or [upload the build](http
 
 In the build:
 * Press right mouse button and WASD to move and QE to raise and lower camera
+* Hold down the mouse wheel to move camera
 * Roll the mouse wheel to zoom in and out
 
 ![Screenshot_1.jpg](Screenshots%2FScreenshot_1.jpg)
