@@ -29,6 +29,14 @@ public class UserInterface : UIBehaviour {
     [SerializeField]
     private Toggle isOptimized;
 
+    [SerializeField]
+    private Toggle viewGrid;
+
+    [SerializeField]
+    private Toggle wireframe;
+
+    public event Action<bool> OnViewGridChanged;
+    public event Action<bool> OnWireframeChanged;
     public Vector2Int InputSize => new(int.Parse(xSize.text), int.Parse(ySize.text));
 
 
@@ -55,6 +63,9 @@ public class UserInterface : UIBehaviour {
 
         seed.text = $"{maze.Seed:N0}";
         isOptimized.isOn = maze.IsOptimized;
+
+        viewGrid.onValueChanged.AddListener(value => OnViewGridChanged?.Invoke(value));
+        wireframe.onValueChanged.AddListener(value => OnWireframeChanged?.Invoke(value));
     }
 
 

@@ -14,6 +14,11 @@ public class MazeGridDrawer : MonoBehaviour {
     private Material gridMaterial;
 
 
+    private void Awake () {
+        userInterface.OnViewGridChanged += value => enabled = value;
+    }
+
+
     private void OnPostRender () {
         DrawGrid();
     }
