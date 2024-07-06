@@ -11,7 +11,7 @@ In the build:
 * Roll the mouse wheel to zoom in and out
 
 ![Screenshot_1.jpg](Screenshots%2FScreenshot_1.jpg)
-<p style="text-align: center;">Maze in Scene View</p>
+<p align="center">Maze in Scene View</p>
 
 ![Screenshot_2.jpg](Screenshots%2FScreenshot_2.jpg)
-<p style="text-align: center;">Maze in Play Mode (build)</p>
+<p align="center">Maze in Play Mode (build)</p>
