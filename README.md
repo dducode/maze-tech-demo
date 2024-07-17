@@ -1,7 +1,7 @@
 ﻿# Maze Technical Demo
 
 It's my project created for demonstrate maze procedural generation. 
-You can clone the project and open it in Unity Editor or [upload the build](https://github.com/dducode/maze-tech-demo/releases/download/1.0.0/maze-tech-demo.zip) and check it without engine.
+You can clone the project and open it in Unity Editor or [download the build](https://github.com/dducode/maze-tech-demo/releases/download/1.0.0/maze-tech-demo.zip) and check it without engine.
 
 * You can generate orthogonal maze with size from `(4;4)` to `(50;50)`
 * Explore the maze as you wish
